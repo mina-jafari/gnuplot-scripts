@@ -1,0 +1,48 @@
+#set term postscript enhanced color "Helvetica" 24
+set term postscript eps color enhanced "Times-Italic" 22
+#set terminal postscript enhanced eps color "Times" 16 dl 3
+#set output "plot.pdf"
+set datafile missing "-"
+#set size square
+#set title "DPPC Equation of State"
+set xtics nomirror 
+#set noxtics
+set ytics nomirror
+set grid
+#set ytics 4
+#set y2tics nomirror
+#unset border
+set style line 2 lt 0 lc rgb "#808080" lw 6 pt -1 ps 1
+set style line 3 lt 0 lc rgb "#FF0000" lw 1 pt -1 ps 1
+#set arrow from graph 0,0 to graph 1,0 size screen 0.025,15,60 \
+#    filled ls 2
+#set arrow from graph 0,0 to graph 0,1 size screen 0.025,15,60 \
+#    filled ls 2 nohead
+#set key box ls -1 font "Helvetica,14"
+#set key at 11,1.8 right font "Times,16" samplen 4.7
+#set nokey
+
+set xlabel 'Activation Energy by DE-GSM (kcal/mol)'
+set ylabel 'Activation Energy by SE-GSM (kcal/mol)'
+set xrange [ 0 : 50 ]
+set yrange [ 0 : 50 ]
+#set title "Calculated Activation Barriers (DE-GSM vs. SE-GSM)"
+
+f(x)=m*x+b
+fit f(x) "gsm-vs-ssm.csv" using 1:2 via m,b
+#title_y(m,b) = sprintf('y(x)=%.2yx + %.2y', m, b)
+
+set style line 1 lt 6 lc rgb "#0000FF" lw 2 pt 14 ps 2
+
+set encoding iso_8859_1
+#plot "Au-Pt" using 1:2 with lines
+#plot "Au-Pt" using 1:2 with linespoints smooth bezier ls 1 title
+plot "gsm-vs-ssm.csv" using 1:2:3 notitle with labels offset 0.5,-0.75 font "Times-Italic,16",\
+      "" notitle with points ls 1,\
+      f(x) notitle ls 2,\
+      f(x)+5 notitle ls 3,\
+      f(x)-5 notitle ls 3
+      #y(x) t title_y(m,b) ls 2
+          #"" using 1:2  notitle smooth csplines with lines ls 1 ,\
+#           NaN title "WGS-Cu(111)" with linespoints ls 1
+#           'TS3.png' binary filetype=png origin=(5,0) dx=0.0088 dy=0.0066 with rgbimage notitle

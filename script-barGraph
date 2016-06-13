@@ -1,0 +1,63 @@
+set term postscript enhanced eps color "Times-Italic" 22
+#set term dumb
+#set term x11
+#set output "plot.ps"
+unset key
+set key inside left top vertical Right reverse noenhanced autotitle nobox
+set key font ",20"
+# Make the x axis labels easier to read.
+#set xtics rotate out
+# Select histogram data
+#set style histogram clustered
+set style histogram clustered gap 1 title textcolor lt -1
+#set datafile missing "noResult"
+set style data histograms
+set style fill pattern 1.00 border
+#set xtics border in scale 0,0 nomirror rotate by -45  autojustify
+#set xtics  norangelimit font "Times-Italic, 14"
+#set xtics   ()
+set noxtics
+set xtics format ""
+#set auto x
+set xtics nomirror
+set ytics nomirror
+set boxwidth 0.9 absolute
+#set key inside right top vertical Right noreverse noenhanced autotitle nobox
+set multiplot layout 1,2
+set rmargin at screen 0.5
+set lmargin 9
+#set xlabel 'rxn #' #font "Times-Italic, 18"
+#set ylabel 'Calculated Activation Barriers (kcal/mol)'
+set ylabel 'Number of Average Gradient Calculations'
+#set title "Calculated Activation Barriers (d-GSM vs. s-GSM)" # for 11-Node Reaction Paths" #\n{/*0.75 NEB results with more than 1800 force calls are not shown}"
+#set title "Comparison of Average Gradient Calculations for Different Methods"
+
+set yrange [ 0 : 1000 ]
+# Give the bars a plain fill pattern, and draw a solid line around them.
+#set style fill solid 1.00 noborder
+#x = 0
+#i = 22
+#set label 1 at 4, 400
+#set label 1 "noRes" rotate by -90 right font "Times,10"
+plot 'average-gradients.csv' using 1:xtic(7) title "DE-GSM" fs pattern 1 lt rgb "#002E62",\
+    "" using 2 title "SE-GSM" fs pattern 2 lt rgb "#FBCE33",\
+    "" using 3 title "CI-NEB" fs pattern 6 lt rgb "#7a121c"
+
+#plot 'histplot.dat' using 2 every ::::0 ti col, '' u 3:xticlabels(1) every ::::0 ti col
+
+set rmargin 9
+set lmargin at screen 0.5
+unset ytics
+unset key
+set format y2 "%g %%"
+unset ylabel
+set y2label 'Success Rate'
+set y2range [ 0 : 100 ]
+set y2tics
+#set key right
+#plot '' using 4 every ::1::1 axes x1y2 ti col, '' u 5:xtic(1) every ::1::1 axes x1y2 ti col
+#plot "" using 4 axes x1y2 ti col #, '' u 5:xtic(1) every ::1::1 axes x1y2 ti col
+plot "" using 4:xtic(7) axes x1y2 title "DE-GSM" fs pattern 1 lt rgb "#002E62",\
+     "" using 5 axes x1y2 title "SE-GSM" fs pattern 2 lt rgb "#FBCE33",\
+     "" using 6 axes x1y2 title "CI-NEB" fs pattern 6 lt rgb "#7a121c"
+unset multiplot
